@@ -8,7 +8,7 @@ module.exports = function(tsFile,callback) {
     let stdout = '';
     let stderr = '';
     let args = ['-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1',tsFile];
-    let ffmpeg = spawn( '/usr/local/bin/ffprobe',args);
+    let ffmpeg = spawn( 'ffprobe',args);
 
     ffmpeg.on('exit', (code, signal) => {
         console.log('ffmpeg exited code: ', code, 'signal: ',signal);
