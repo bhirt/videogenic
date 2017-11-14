@@ -1,0 +1,66 @@
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/css/edlcutter.css">
+<link rel="stylesheet" href="/css/rc-slider.css">
+
+<style>
+    .xxxframeSelectContainer { display: flex; flex-wrap: wrap; justify-content: center;}
+    .xxxframeSelectContainer img { margin: 2px }
+
+    .frameSelectContainer { display: flex; flex-wrap: wrap; justify-content: center;}
+    .frameSelectContainer div { margin: 5px; }
+    .frameSelectContainer div:hover { margin: 1px; border: 4px solid #ccc; cursor: pointer; }
+    .frameSelectContainer div.active { margin: 1px; border: 4px solid green }
+    .frameSelectContainer img { margin: 1px;}
+
+    .justify-image{ text-align: center;}
+    .justify-image img{display:inline-block; width: 100px; }
+    .justify-image:after { content: ""; width: 100%; display: inline-block; }
+    .frameSelectModal { width: 90% }
+
+    .timeline { 
+        position: relative;
+        width: 100%;
+        height: 2em;
+        background-color: #ccc;
+}
+
+    .fiveMinuteHash { 
+top: 0px;
+width: 1px;
+background-color: #eee;
+position: absolute;
+height: 100%;
+padding: 0;
+margin: 0;
+}
+    .minuteHash { 
+top: 0px;
+width: 1px;
+background-color: #eee;
+position: absolute;
+height: 50%;
+padding: 0;
+margin: 0;
+}
+
+</style>
+
+</head>
+<body>
+
+<% include ./partials/header %>
+
+<div id="root"></div>
+
+<script src="/js/edlcutter.js"></script>
+
+<% include ./partials/footer %>
+
+</body>
+</html>

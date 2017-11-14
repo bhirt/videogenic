@@ -1,0 +1,161 @@
+@import "file-picker";
+@import "frame-preview";
+
+
+html {
+    font-size: 200%;
+}
+
+/* grid layout */
+div.wrapper {
+    padding: 10px;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media screen and (min-width: 768px) {
+    /* Styles */
+    div.wrapper {
+	display: block;
+    }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media screen and (min-width: 992px) {
+    html {
+	font-size: 100%;
+    }
+
+    /* Styles */
+    div.wrapper {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 10px;
+	grid-auto-rows: minmax(50px, auto);
+    }
+
+    #pageTitle {
+	grid-column: 1/4;
+	grid-row: 1;
+    }
+
+    #edlContainer {
+	grid-column: 3;
+	grid-row: 2;
+    }
+
+    #thumbnail-container {
+	grid-column: 1/3;
+	grid-row: 2;
+    }
+
+    #mslider-container {
+	grid-column: 1/4;
+	grid-row: 3;
+    }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media screen and (min-width: 1200px) {
+}
+
+.ui-slider .ui-slider-handle {
+	width: 10px;
+}
+
+.edl-sliders {
+	background-color: yellow;
+	font-size: 50%;
+}
+
+.ed-slider {
+	margin: 1px 10px;
+	padding: 0;
+	background-color: green;
+	height: 1em;
+}
+
+#edl li {
+	margin: 5px 10px;
+}
+
+/*#edl li:hover {
+	background-color: green;
+}*/
+
+#dialog-thumbnails {
+	text-align: center;
+}
+
+div.frameSelect { 
+   float: left;
+   margin: 1px;
+   padding: 0px;
+   position: relative; 
+}
+
+div.frameSelect img { 
+	z-index: -1;
+	// width: 200px;
+	// height: auto; 
+}
+
+div.frameSelect div { 
+	z-index: 1000;
+	text-align: right;
+   position: absolute; 
+	color: white;
+	font: bold 12px Helvetica, Sans-Serif;
+   background: rgba(0, 0, 0, 0.7);
+	
+   
+   top: 0; 
+   left: 0; 
+   width: 100%; 
+}
+
+.arrow-right {
+  width: 0; 
+  height: 0; 
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  
+  border-left: 20px solid green;
+}
+
+
+div.keyframe div { 
+   background: rgba(0, 255, 0, 0.7);
+}
+
+
+#edlContainer {
+    background-color: #fefefe;
+    border: 1px solid #ccc
+}
+
+#edl {
+    list-style-position: inside;
+    margin: 0;
+    padding: 1em;
+}
+
+#edl li {
+    padding: 0;
+    margin: 0;
+}
+
+#edlContainer h2 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+#edlNotes,
+#edlSplices
+{
+    margin: 0;
+    padding: 0 1em;
+}
+
+#edlNotes span.edlValue { float: right; }
+#edlSplices span.edlValue { float: right; }

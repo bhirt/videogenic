@@ -1,0 +1,66 @@
+.modal-body {
+    overflow-x: auto;
+}
+
+#fileBrowser {
+	width: 100%;
+	height: 16em;
+	max-width: 100%;
+	padding: 0;
+	border: 1px solid #eee;
+	overflow: scroll-x;
+}
+
+#fileBrowserContainer {
+	padding: 0;
+	margin: 0;
+	width: 2000px;
+}
+
+ul.fileList {
+	padding: 0;
+	margin: 0;
+	list-style-type: none;
+	border: 2px solid #eee;
+	
+	float: left;
+	overflow: auto;
+	width: 20em;
+	height:15em;
+}
+
+ul.fileList li {
+	margin: 0;
+	padding: 0;
+}
+
+ul.fileList li a {
+	display: block;
+	text-decoration: none;
+	padding: 3px;
+	color: black;
+	border-bottom: 1px solid #fee;
+}
+
+ul.fileList li a:hover {
+	background-color: #eee;
+}
+
+ul.fileList li.directory a::after {
+  content: '';
+  float: right;
+  width: 0; 
+  height: 0; 
+  border-top: .4em solid transparent;
+  border-bottom: .4em solid transparent;
+  border-left: .4em solid black;
+	
+}
+
+ul.fileList li.directory {
+	background-color: white;
+}
+
+ul.fileList li.file {
+	background-color: white;
+}

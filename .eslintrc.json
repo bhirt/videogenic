@@ -1,0 +1,25 @@
+{
+    "parser" : "babel-eslint",
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "plugins" : [
+        "react"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "rules": {
+        "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+
+        "indent": [ "error", 4 ],
+        "no-var" : [ "error" ],
+        "brace-style" : [ "error", "stroustrup" ],
+        "linebreak-style": [ "error", "unix" ],
+        "quotes": [ "error", "single" ],
+        "semi": [ "error", "always" ],
+        "no-console": [ "off" ]
+    }
+}

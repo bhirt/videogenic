@@ -1,0 +1,28 @@
+@import "file-picker";
+@import "frame-preview";
+
+// https://stackoverflow.com/questions/7189608/how-do-i-make-an-input-element-occupy-all-remaining-horizontal-space
+.formLine {
+    overflow: hidden;
+    padding: 2px 0px;
+}
+.formLine input {
+    width: 100%;
+}
+.formLine label {
+    float: left;
+}
+.formLine span {
+    display: block;
+    overflow: hidden;
+    padding: 0 5px;
+}
+.formLine input, .formLine button {
+    box-sizing: border-box;
+}
+
+// override frame-preview
+#thumbnail-container img#thumbnail {
+  width: 100%;
+}
+

@@ -1,3 +1,7 @@
+# vim tmp files
+*.swp
+*.swo
+
 # Logs
 logs
 *.log
@@ -57,3 +61,7 @@ typings/
 # dotenv environment variables file
 .env
 
+# search tool ag
+.hgignore
+
+src/dist
