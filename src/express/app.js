@@ -160,7 +160,7 @@ app.get('/image/:ts', function (req, res) {
                 '-s','hd480','-q:v','10','-f','image2pipe','-f','mjpeg','-'];
         }
 
-        let child = spawn( '/usr/local/bin/ffmpeg',args);
+        let child = spawn( 'ffmpeg',args);
         child.stdout.pipe(res);
 
         child.on('exit', (code, signal) => {

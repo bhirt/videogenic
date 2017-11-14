@@ -254,7 +254,7 @@ exports.ioFrameSelect =  function ioFrameSelect(socket,referenceTs) {
 
             console.log(args.join(' '));
 
-            let ffmpeg = spawn( '/usr/local/bin/ffmpeg',args);
+            let ffmpeg = spawn( 'ffmpeg',args);
 
             ffmpeg.on('error', (error) => {
                 console.log(error);
@@ -405,7 +405,7 @@ function cutVideo(socket,metadata,progress,start,duration,input,output,callback)
     console.log(`ffmpeg ${args.join(' ')}`);
 
 
-    let ffmpeg = spawn( '/usr/local/bin/ffmpeg',args);
+    let ffmpeg = spawn( 'ffmpeg',args);
 
     ffmpeg.on('error', (error) => {
         console.log(error);
@@ -455,7 +455,7 @@ function concatVideo(socket,progress,fileList,output,callback) {
 
     console.log(`args: ${args.join(' ')}`);
     
-    let ffmpeg = spawn( '/usr/local/bin/ffmpeg',args);
+    let ffmpeg = spawn( 'ffmpeg',args);
 
     ffmpeg.on('error', (error) => {
         console.log(error);
