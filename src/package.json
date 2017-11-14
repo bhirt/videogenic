@@ -43,7 +43,7 @@
   },
   "scripts": {
     "watch:express"        : "NODE_ENV=development babel-watch --presets stage-2 express/app.js",
-    "watch:react"          : "babel-watch --presets stage-1 app.js",
+    "watch:react"          : "NODE_ENV=development webpack --progress --colors --watch",
     "build:react"          : "NODE_ENV=production webpack --progress",
     "build:express"        : "NODE_ENV=production babel express -d dist/express --presets env,stage-2",
     "build:express-common" : "NODE_ENV=production babel common -d dist/common --presets env,stage-2",
