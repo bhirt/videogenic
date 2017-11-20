@@ -13,11 +13,13 @@ const utils = require('../../common/utils');
 const encodeImageToDataURI = require('../../common/utils').encodeImageToDataURI;
 const saveRangesFromEDL = require('../../common/utils').saveRangesFromEDL;
 const probeTsFile = require('../../common/utils/probeTsFile');
+const saveEdlFile = require('../../common/utils/saveEdlFile');
 const parseEdlFile = require('../../common/utils/parseEdlFile');
 
-// global of media root
-let rootDirectory = '/Users/bhirt/Plex';
+const config = require('config');
 
+// global of media root
+const rootDirectory = config.get('mediaLibrary.path');
 
 function cutSection(sectionNumber,edl,duration,state,callback) {
     console.log(edl);
@@ -99,7 +101,7 @@ exports.ioSaveEDL = function(socket,msg) {
     console.log('msg - ',msg);
     console.log('ioSaveEDL - ',state);
 
-    utils.saveEdlFile(msg.edl,state.edlFile,function(err,results) {
+    saveEdlFile(msg.edl,state.edlFile,function(err,results) {
         state.edl = msg.edl;
         socket.handshake.session.save();
     });

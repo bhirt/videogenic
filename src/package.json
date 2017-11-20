@@ -2,6 +2,7 @@
   "dependencies": {
     "axios": "^0.17.1",
     "babel-loader": "^7.1.2",
+    "config": "^1.28.1",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
@@ -42,14 +43,14 @@
     "npm-run-all": "^4.1.2"
   },
   "scripts": {
-    "watch:express"        : "NODE_ENV=development babel-watch --presets stage-2 express/app.js",
-    "watch:react"          : "NODE_ENV=development webpack --progress --colors --watch",
-    "build:react"          : "NODE_ENV=production webpack --progress",
-    "build:express"        : "NODE_ENV=production babel express -d dist/express --presets env,stage-2",
-    "build:express-common" : "NODE_ENV=production babel common -d dist/common --presets env,stage-2",
-    "build:css-all"        : "NODE_ENV=production grunt less:prod",
-    "build:express-views"  : "ncp express/views/ dist/express/views/",
-    "build"                : "npm-run-all build:*",
-    "start"                : "NODE_ENV=production node dist/express/app.js"
+    "watch:express": "NODE_ENV=development babel-watch --presets stage-2 express/app.js",
+    "watch:react": "NODE_ENV=development webpack --progress --colors --watch",
+    "build:react": "NODE_ENV=production webpack --progress",
+    "build:express": "NODE_ENV=production babel express -d dist/express --presets env,stage-2",
+    "build:express-common": "NODE_ENV=production babel common -d dist/common --presets env,stage-2",
+    "build:css-all": "NODE_ENV=production grunt less:prod",
+    "build:express-views": "ncp express/views/ dist/express/views/",
+    "build": "npm-run-all build:*",
+    "start": "NODE_ENV=production node dist/express/app.js"
   }
 }

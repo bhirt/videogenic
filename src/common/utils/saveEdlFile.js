@@ -1,4 +1,5 @@
 const fs = require('fs');
+const sprintf = require('sprintf-js').sprintf;
 
 module.exports = function(edl,filename,callback) {
     console.log(edl,filename);
@@ -13,7 +14,7 @@ module.exports = function(edl,filename,callback) {
     });
 
     edl.forEach(function(ed) {
-        wstream.write(ed.join('\t') + '\n');
+        wstream.write(sprintf("%0.2f\t%0.2f\t%d\n",ed[0],ed[1],ed[2]));
     });
     wstream.end();
     

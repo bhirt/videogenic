@@ -104,7 +104,9 @@ export default class EDLCutter extends React.Component {
 
     // Button event from own component -- happens when the 'Save EDL' button is clicked
     handleSaveEDL() {
-        console.log('save EDL not implemented yet');
+        let msg = { edl : this.edl.rawData() };
+
+        socket.emit('saveEDL',msg);
     }
 
     render() {

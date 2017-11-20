@@ -185,45 +185,6 @@ app.get('/image/:ts', function (req, res) {
         
 });
 
-
-app.get('/video', function(req, res) {
-    const path = '/Users/bhirt/Plex/TV Shows/The Simpsons/Season 9/9-09 Realty Bites.mp4';
-    fs.stat(path,function(err,stat) {
-        const fileSize = stat.size;
-        const range = req.headers.range;
-        if (range) {
-            const parts = range.replace(/bytes=/, '').split('-');
-            const start = parseInt(parts[0], 10);
-            const end = parts[1] 
-                ? parseInt(parts[1], 10)
-                : fileSize-1;
-            const chunksize = (end-start)+1;
-            const file = fs.createReadStream(path, {start, end});
-            const head = {
-                'Content-Range': `bytes ${start}-${end}/${fileSize}`,
-                'Accept-Ranges': 'bytes',
-                'Content-Length': chunksize,
-                'Content-Type': 'video/mp4',
-            };
-
-            console.log(`Content-Range': bytes ${start}-${end}/${fileSize}`);
-
-            res.writeHead(206, head);
-            file.pipe(res);
-        }
-        else {
-            const head = {
-                'Content-Length': fileSize,
-                'Content-Type': 'video/mp4'
-            };
-            res.writeHead(200, head);
-            fs.createReadStream(path).pipe(res);
-        }
-    });
-});
-
-
-//app.listen(3000, function () {
 http.listen(3000, function(){
     console.log('Example app listening on port 3000!');
 });
