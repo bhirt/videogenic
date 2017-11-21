@@ -60,11 +60,6 @@ export default class EDLCutter extends React.Component {
         }
     }
 
-
-    // Window event -- when the windo is resized
-    handleWindowResize() {
-    }
-
     // EDLSlider event -- happens when the user hovers over the timeline
     handlePreviewTs(previewTs) {
         this.setState( { previewTs } );
@@ -92,7 +87,7 @@ export default class EDLCutter extends React.Component {
         let self = this;
 
         // send event to parent that our task is starting
-        self.props.onTaskStart();
+        self.props.onTaskStart( { taskName : 'Cut Video' } );
 
         let msg = { edl : this.edl.rawData() };
 
@@ -126,7 +121,6 @@ export default class EDLCutter extends React.Component {
                 revision={this.state.revision} edl={this.edl} duration={this.props.fileInfo.duration} onTimestampClick={this.handleEDTimestampClick.bind(this)}/>
 
             <FrameSelectDialog 
-                revision={this.state.revision}
                 edl={this.edl} 
                 ed={this.state.selectFrame.ed} 
                 socket={socket} 

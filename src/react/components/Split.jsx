@@ -84,7 +84,7 @@ export default class Split extends React.Component {
         let self = this;
 
         // send event to parent that our task is starting
-        self.props.onTaskStart();
+        self.props.onTaskStart( { taskName : 'Split Video' } );
 
         let msg = { 'filename1' : this.state.filename1, 'filename2' : this.state.filename2, 'ts' : self.state.currentTs };
         splitVideo( msg,function(progress) {

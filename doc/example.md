@@ -12,7 +12,7 @@ You also see additional information about the EDL, splice points in the final vi
 
 ## Split Video
 
-This demonstrates how to select a point for a video to be split.  You can see if there is an EDL for the video, the commercials will be displayed in red and you also get an idea of how long it takes to split a 1.8G file into two parts.  The video is not sped up and is the actual time it takes to split the files on my late 2012 iMac.
+This demonstrates how to select a point for a video to be split.  You can see if there is an EDL for the video, the commercials will be displayed in red and you also get an idea of how long it takes to split a 1.8G file into two parts.  Also, if the file name follows the Plex naming convention for two part shows, the splitter can parse the name and derive the correct names of the split video (although not the episode number). The video is not sped up and is the actual time it takes to split the files on my late 2012 iMac.
 
 ![alt text][split]
 

@@ -31,6 +31,10 @@ export default class EDLSlider extends React.Component {
         super(props);
 
         this.prevValues = [];
+        this.state = {
+            sliderDragging : false,
+            previewTs : 0
+        };
     }
 
     onChange(values) {
@@ -39,9 +43,9 @@ export default class EDLSlider extends React.Component {
 
         let changeIndex = -1;
         values.find( v => this.prevValues[++changeIndex] != v );
-        console.log('first change index ',changeIndex);
-        console.log('onChange: current values ',values);
-        console.log('onChange: prev values ',this.prevValues);
+        //console.log('first change index ',changeIndex);
+        //console.log('onChange: current values ',values);
+        //console.log('onChange: prev values ',this.prevValues);
 
         this.prevValues = [...values];
 
@@ -69,11 +73,24 @@ export default class EDLSlider extends React.Component {
     }
 
     handleTimelineMouseMove(e) {
-        const width = this.divElement.clientWidth;
+        if (this.state.sliderDragging) {
+            return;
+        }
 
-        let pct = clamp( e.nativeEvent.offsetX / width, 0, 1);
+        let rect = this.divElement.getBoundingClientRect();
+
+        let offsetX = e.pageX - rect.x;
+
+//        console.log(`width: ${rect.width}; offsetX ${e.nativeEvent.offsetX}; clientX ${e.clientX}`);
+//        console.log(e.nativeEvent);
+//        console.log(this.divElement.getBoundingClientRect());
+
+
+        let pct = clamp( offsetX / rect.width, 0, 1);
         let previewTs = this.props.duration * pct;
-        console.log('previewTs ',previewTs);
+
+        console.log(`width: ${rect.width}; left ${rect.x}; offsetX ${offsetX} pct ${pct} ts ${previewTs}`);
+        //console.log('previewTs ',previewTs);
 
         this.setState( { previewTs } );
 
@@ -82,17 +99,17 @@ export default class EDLSlider extends React.Component {
         }
 
 
-        console.log(this.state);
+        //console.log(this.state);
     }
 
     handleRemoveED(ed) {
-        console.log('handle remove ed');
+        //console.log('handle remove ed');
 
         this.props.edl.remove(ed);
     }
 
     handleAddED(range) {
-        console.log('handle add ed');
+        //console.log('handle add ed');
         let thirds = (range[1] - range[0]) / 3;
 
         this.props.edl.add(range[0]+thirds,range[1]-thirds,EDL.CUT);
@@ -113,12 +130,25 @@ export default class EDLSlider extends React.Component {
         });
 
         if (beforeED && afterED) {
-            console.log(`beforeED ${JSON.stringify(beforeED)} / afterED: ${JSON.stringify(afterED)}`);
+            //console.log(`beforeED ${JSON.stringify(beforeED)} / afterED: ${JSON.stringify(afterED)}`);
             this.props.edl.merge(beforeED,afterED);
         }
         else {
             throw(`failed to find before and after ed for range ${range}`);
         }
+    }
+
+
+    // <Range> event - when slider starts dragging
+    handleRangeBeforeChange() {
+        console.log('slider start dragging');
+        this.setState( { sliderDragging : true } );
+    }
+
+    // <Range> event - when slider stops dragging
+    handleRangeAfterChange() {
+        console.log('slider stopped dragging');
+        this.setState( { sliderDragging : false } );
     }
 
     tipFormatter(value) {
@@ -129,7 +159,7 @@ export default class EDLSlider extends React.Component {
     render() {
         let self = this;
 
-        console.log('EDLSlider:render()');
+        //console.log('EDLSlider:render()');
 
         // takes a timestamp and returns a css percent value based on duration and width
         function _ts2pct(ts) {
@@ -204,9 +234,9 @@ export default class EDLSlider extends React.Component {
             idx++;
         });
 
-        console.log('EDLSlider:saves',saves);
-        console.log('EDLSlider:values',values);
-        console.log('EDLSlider:edl',this.props.edl);
+        //console.log('EDLSlider:saves',saves);
+        //console.log('EDLSlider:values',values);
+        //console.log('EDLSlider:edl',this.props.edl);
 
 
         let rangeKey = 'range-' + this.props.edl.numED();
@@ -218,6 +248,8 @@ export default class EDLSlider extends React.Component {
                     min={0} 
                     max={max} 
                     tipFormatter={ ts => sec2ts(ts/100) }
+                    onBeforeChange={this.handleRangeBeforeChange.bind(this)}
+                    onAfterChange={this.handleRangeAfterChange.bind(this)}
                     onChange={this.onChange.bind(this)} 
                     //                count={this.props.edl.numED()} 
                     railStyle={rail} 

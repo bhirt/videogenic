@@ -191,6 +191,25 @@ class EDL extends EventEmitter {
         });
     }
 
+    // returns ed data or undef if a bad range was supplied
+    edAtIndex(idx) {
+        return (idx >= 0) && (idx < this._list.length) ? this._list[idx] : undefined;
+    }
+
+    // return the ed after the supplied ed, or null if there is none
+    edAfter(ed) {
+        let idx = this._list.indexOf(ed);
+
+        return (idx + 1 < this._list.length) ? this._list[idx+1] : null;
+    }
+
+    // return the ed before the supplied ed, or null if there is none
+    edBefore(ed) {
+        let idx = this._list.indexOf(ed);
+
+        return (idx > 0) ? this._list[idx-1] : null;
+    }
+
     // returns the total amount of time cut in the edl
     cutTime() {
         let t = 0;
@@ -200,11 +219,6 @@ class EDL extends EventEmitter {
             }
         });
         return t;
-    }
-
-    // returns ed data or undef if a bad range was supplied
-    edAtIndex(idx) {
-        return (idx >= 0) && (idx < this._list.length) ? this._list[idx] : undefined;
     }
 }
 

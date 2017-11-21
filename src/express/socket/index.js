@@ -58,7 +58,7 @@ exports.ioProcessCuts = function(socket,msg) {
     let progress = { 
         current : 0, 
         duration : saves.duration * 2,
-        eventName : 'trimVideoProgress' };
+        eventName : 'cutVideoProgress' };
 
     let input = state.tsFile;
     let cuts = [];
@@ -87,10 +87,23 @@ exports.ioProcessCuts = function(socket,msg) {
         actions,
         function(err, results) {
             console.log('ffmpeg completed');
-            console.log('--err--');
-            console.log(err);
-            console.log('--results--');
-            console.log(results);
+
+            if (err) {
+                console.log('async.series not okay');
+                console.log('--err--');
+                console.log(err);
+                console.log('--results--');
+                console.log(results);
+
+                socket.emit('cutVideoError', { msg: `${results}` });
+            }
+            else {
+                console.log('ffmpeg completed');
+                console.log('--results--');
+                console.log(results);
+
+                socket.emit('cutVideoComplete', { pct: 1 } );
+            }
         }
     );
 };
@@ -128,7 +141,7 @@ exports.ioFileSelected =  function(socket,msg) {
     async.parallel(
         {
             probe : function(callback) {
-    console.log(probeTsFile);
+                console.log(probeTsFile);
                 probeTsFile(state.tsFile,callback); 
             },
             edl : function(callback) {
@@ -167,7 +180,7 @@ exports.ioFileSelected =  function(socket,msg) {
 
 exports.ioFrameSelectBefore = function(socket,referenceTs) {
     // ffmpeg -ss 00:20:10 -i PAW\ Patrol\ \(2013\)\ -\ S01E02\ -\ Pup\ Pup\ Boogie\;\ Pups\ in\ a\ Fog.ts -t 5 -an -f mpegts -r 4 - | ffmpeg -y -i - -vf reverse /tmp/blah-%d.jpg 
-}
+};
 
 
 // interesting read
@@ -219,13 +232,17 @@ exports.ioFrameSelect =  function ioFrameSelect(socket,referenceTs) {
 
             // initialize the pipe context
             let frameTs = startTs;
-            let frameCounter = 0;
+            let frameNumber = 1;
 
             // ffmpeg pipe2jpeg event listener for parsing ffmpeg outpot stream
             let p2j = new P2J();
             p2j.on('jpeg', (jpeg) => {
+                let frameId = Math.floor(frameTs * 100);
+
                 // Send base64 encoded image to client using socket.io
-                socket.emit('frameSelect', { id : ++frameCounter,
+                socket.emit('frameSelect', { 
+                    id : frameId,
+                    num : frameNumber++,
                     selected: referenceTs >= (frameTs - 0.5/fps) && referenceTs < (frameTs + 0.5/fps),
                     src : encodeImageToDataURI(jpeg, 'jpeg'),
                     ts : frameTs } );
@@ -491,12 +508,14 @@ exports.ioSplitVideo = function(socket,msg) {
     }
     else if (! msg ) {
         socket.emit('splitVideoError', { msg: 'missing message from client'  });
-    } else if ( Number.parseFloat(msg.ts) === NaN ) {
+    }
+    else if ( isNaN(Number.parseFloat(msg.ts)) ) {
         socket.emit('splitVideoError', { msg: 'the timestamp to split at is missing'  });
     }
     else if ( msg.ts <= 0 || msg.ts >= state.duration) {
         socket.emit('splitVideoError', { msg: 'the split location must be greater than 00:00:00 and less than the duration of the video'  });
-    } else if (! ( msg.part1 && msg.part2 && msg.part1.filename && msg.part2.filename) ) {
+    }
+    else if (! ( msg.part1 && msg.part2 && msg.part1.filename && msg.part2.filename) ) {
         // make sure we have all the correct arguments
         socket.emit('splitVideoError', { msg: 'the supplied arguments are incomplete or invalid'  });
     }

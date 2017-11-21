@@ -227,8 +227,8 @@ class FramePreviewManager extends EventEmitter {
                     }
                 }
                 else {
-                    console.log('error missing response property');
-                    console.log(error);
+                    //console.log('error missing response property');
+                    //console.log(error);
                 }
             });
  

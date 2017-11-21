@@ -58,20 +58,24 @@ export function splitVideo(splitInfo,callback) {
 
 export function cutVideo(cutInfo,callback) {
     function _cutVideoProgress(msg) {
+        console.log('cutVideoProgress');
         callback( { done: false, error: false, msg: null, pct: msg.pct } );
     }
 
     function _cutVideoError(msg) {
+        console.log('cutVideoError');
         callback( { done: true, error: true, msg: msg.msg, pct : null } );
         _cutVideoSocketOff();
     }
 
     function _cutVideoComplete(msg) {
+        console.log('cutVideoComplete');
         callback( { done: true, error: false, msg: null, pct: msg.pct } );
         _cutVideoSocketOff();
     }
 
     function _cutVideoSocketOff() {
+        console.log('cutVideoSocketOff');
         socket.off('cutVideoProgress', _cutVideoProgress);
         socket.off('cutVideoError', _cutVideoError);
         socket.off('cutVideoComplete', _cutVideoComplete);
@@ -83,7 +87,7 @@ export function cutVideo(cutInfo,callback) {
     socket.on('cutVideoComplete', _cutVideoComplete);
 
     // initiate  video with server
-//    socket.emit('processCuts',cutInfo );
+    socket.emit('processCuts',cutInfo );
 }
 
 export function cancelSplitVideo(callback) {
@@ -94,7 +98,9 @@ export function requestDirectoryListing(path,callback) {
 
     function _directoryListing(listing) {
         // server doesn't return data in the same format the FilePicker needs.
-        let items = listing.files.map( (f) => { return { 'id' : f.id, 'name': f.file, 'isDirectory': f.isDirectory } } );
+        let items = listing.files.map( (f) => {
+            return { 'id' : f.id, 'name': f.file, 'isDirectory': f.isDirectory }; 
+        } );
 
         console.log('requestDirectoryListing:directoryListing:listing',listing);
         callback( { path: listing.path, items : items } );
@@ -103,7 +109,7 @@ export function requestDirectoryListing(path,callback) {
     socket.once('directoryListing', _directoryListing);
 
     // unused, here for compat with jquery for now
-    var msg = { column: 1 }; 
+    let msg = { column: 1 }; 
     if (path && path.length) {
         msg.path = path;
     }

@@ -27,7 +27,6 @@ class FrameSelectImage extends React.Component {
 export default class FrameSelectDialog extends React.Component {
 
     static propTypes = {
-        revision: PropTypes.number.isRequired,
         onDialogDidClose : PropTypes.func.isRequired,
         socket : PropTypes.object.isRequired,
         position : PropTypes.string,
@@ -39,18 +38,20 @@ export default class FrameSelectDialog extends React.Component {
         super(props);
 
         this.state = { show : false,
+            ed : null,
+            position : null,
             thumbnails : [] };
     }
 
     componentWillMount() {
-        //        console.log('FrameSelectDialog: component will mount');
+        console.log('FrameSelectDialog: component will mount');
 
         this.handleThumbnailReceivedPromise = this.handleThumbnailReceived.bind(this);
         this.props.socket.on('frameSelect', this.handleThumbnailReceivedPromise);
     }
 
     componentWillUnmount() {
-        //        console.log('component will unmount');
+        console.log('FrameSelectDialog: component will unmount');
 
         this.props.socket.off('frameSelect', this.handleThumbnailReceived);
         this.handleThumbnailReceived = null;
@@ -61,25 +62,61 @@ export default class FrameSelectDialog extends React.Component {
     componentWillReceiveProps(nextProps) {
         let ed = nextProps.ed;
         let position = nextProps.position;
-        if (ed && position && !this.state.show) {
-            //            console.log('willReceiveProps, socket.emit(frameSelect)');
 
-            this.setState( { show: true, thumbnails: [] });
-
-            let ts = position == 'start' ? ed.start : ed.end;
-
-            this.props.socket.emit('frameSelect',{ ts: ts } );
-
+        // ignore any props if the dialog is already visible.
+        if (this.state.show) {
+            return;
         }
+
+        if (ed && position) {
+            console.log('FrameSelectDialog: will receive props; request thumbnails');
+            this.setState( { show: true } );
+            this.setSelectedED(ed,position);
+        }
+/*        else {
+            console.log('FrameSelectDialog: will receive props');
+            console.log('FrameSelectDialog: ed',ed);
+            console.log('FrameSelectDialog: position',position);
+            this.setState( { ed : ed, position : position } );
+
+        } */
+    }
+
+    // sets the state for the supplied ED and position. resets the thumbnails to an empty array and 
+    // sends a request to the datasource for the relevent thumbnails.
+    setSelectedED(ed,position) {
+        this.setState( { ed : ed, position: position, thumbnails: [] }, () => { this.requestThumbnails() } );
+    }
+
+    // sets the position for the current ed.  resets thumbnails and requests thumbnails from the datasource
+    // convience method for setSelectedEd(this.state.ed,position)
+    setSelectedPosition(position) {
+        this.setSelectedED(this.state.ed,position);
+    }
+
+    // requests frames for the selected ed & position
+    requestThumbnails() {
+        let position = this.state.position;
+        let ed = this.state.ed;
+        let ts = position == 'start' ? ed.start : ed.end;
+        console.log(`request thumbnails ts ${ts}`);
+        this.props.socket.emit('frameSelect',{ ts: ts } );
     }
 
     handleImageClick(img) {
         //        console.log('image clicked');
         //        console.log(img);
 
-        let ed = this.props.ed;
-        let start = this.props.position == 'start' ? img.ts : ed.start;
-        let end = this.props.position == 'end' ? img.ts : ed.end;
+        let ed = this.state.ed;
+        let start = this.state.position == 'start' ? img.ts : ed.start;
+        let end = this.state.position == 'end' ? img.ts : ed.end;
+        console.log('imageClick');
+        console.log('ed');
+        console.log(ed);
+        console.log('start');
+        console.log(start);
+        console.log('end');
+        console.log(end);
 
         this.props.edl.update(ed.id,start,end,ed.action);
     }
@@ -92,14 +129,41 @@ export default class FrameSelectDialog extends React.Component {
         }
     }
 
-    setEdAndPosition(ed,position) {
+    // MenuItem event -- called when one of the dropdown of menu items 
+    // containing the edit timestamp is clicked
+    handleMenuEDAndPositionClicked(ed,position) {
+        this.setSelectedED(ed,position);
         console.log(`set ed and position ${ed.id} ${position}`);
     }
 
     handleNextED() {
+        let nextEd = this.props.edl.edAfter(this.state.ed);
+        if (this.state.position == 'end') {
+            if (nextEd) {
+                this.setSelectedED(nextEd,'start');
+            }
+            else {
+                console.log('there is no next ed');
+            }
+        }   
+        else {
+            this.setSelectedPosition('end');
+        }
     }
 
     handlePrevED() {
+        if (this.state.position == 'start') {
+            let prevEd = this.props.edl.edBefore(this.state.ed);
+            if (prevEd) {
+                this.setSelectedED(prevEd,'end');
+            }
+            else {
+                console.log('there is no prev ed');
+            }
+        }   
+        else {
+            this.setSelectedPosition('start');
+        }
     }
 
     // Socket.io 'frameSelect' event 
@@ -114,26 +178,29 @@ export default class FrameSelectDialog extends React.Component {
         let content = null;
 
         
-        if (this.props.ed && this.props.position) {
-            console.log(`render() numThumbs=${this.state.thumbnails.length}`);
+        if (this.state.ed && this.state.position) {
+            //console.log(`render() numThumbs=${this.state.thumbnails.length}`);
 
             let dropdownButtonName = '';
-            if (this.props.position == 'start') {
-                dropdownButtonName = sec2ts(this.props.ed.start) + ' (start)';
+            if (this.state.position == 'start') {
+                dropdownButtonName = sec2ts(this.state.ed.start) + ' (start)';
             }
             else {
-                dropdownButtonName = sec2ts(this.props.ed.end) + ' (end)';
+                dropdownButtonName = sec2ts(this.state.ed.end) + ' (end)';
             }
 
             let menuItems = []; 
             let num = 1;
+            let key = 1;
+//            const style = { paddingRight: '1em', float : 'right' };
+            const style = {}; //{ float : 'right' };
             this.props.edl.list().forEach( ed => {
-                menuItems.push(<MenuItem onClick={ () => self.setEdAndPosition(ed,'start')}>#{num} {sec2ts(ed.start)} (start)</MenuItem>);
-                menuItems.push(<MenuItem onClick={ () => self.setEdAndPosition(ed,'end')}>#{num++} {sec2ts(ed.end)} (end)</MenuItem>);
+                menuItems.push(<MenuItem key={key++} onClick={ () => self.handleMenuEDAndPositionClicked(ed,'start')}>#{num} {sec2ts(ed.start)} <span style={style}>(start of cut)</span></MenuItem>);
+                menuItems.push(<MenuItem key={key++} onClick={ () => self.handleMenuEDAndPositionClicked(ed,'end')}>#{num++} {sec2ts(ed.end)} <span style={style}>(end of cut)</span></MenuItem>);
             });
-            console.log('modal()');
+            //console.log('modal()');
             let thumbs = this.state.thumbnails.map( img => {
-                let edValue = this.props.position == 'start' ? this.props.ed.start : this.props.ed.end;
+                let edValue = this.state.position == 'start' ? this.state.ed.start : this.state.ed.end;
                 let className = Math.abs(edValue - img.ts) < 0.015 ? 'active' : '';
 
                 //                console.log(`value = ${edValue} ; img.ts = ${img.ts} ; diff = ${Math.abs(edValue - img.ts)} ; className=${className}`);

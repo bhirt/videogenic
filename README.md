@@ -6,7 +6,7 @@ Videogenic currently has two functions.   The spilt feature allows you to select
 
 The program front end currently runs in a browser with a backend that can be run locally on your desktop or remotely on your media server.   Node is required.
 
-In the future there are plans to support native applications on Mac/Windows/Linux in addition to the current client server.   You can [read more](doc/about.md) about the history of this project, future goals and the roadmap and also [see a few animated gifs](doc/example.md) that demonstrate the interface.
+In the future there are plans to support native applications on Mac/Windows/Linux in addition to the current client server.   You can [read more](doc/about.md) about the history of this project, future goals and the roadmap.  You can also [see a few animated gifs](doc/example.md) that demonstrate the interface for split and cut.
 
 # Setup/Install
 

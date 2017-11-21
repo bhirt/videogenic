@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
 const app = express();
 const { spawn } = require('child_process');
 const socketRoutes = require('./socket');
@@ -79,7 +78,7 @@ app.set('view engine', 'ejs');
 app.use(require('morgan')('dev'));
 app.set('views', path.join(__dirname, 'views'));
 
-var env = process.env.NODE_ENV || 'development';
+let env = process.env.NODE_ENV || 'development';
 if ('development' == env) {
     app.use(express.static(path.join(__dirname, '..','dist','static')));
 }
@@ -115,7 +114,7 @@ app.get('/image/:ts', function (req, res) {
 
     let state = req.session.userdata;
 
-      res.setHeader('Content-Type', 'image/jpeg');
+    res.setHeader('Content-Type', 'image/jpeg');
 
 
     if (state) {

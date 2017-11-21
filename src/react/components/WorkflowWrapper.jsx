@@ -29,6 +29,7 @@ export default class WorkflowWrapper extends React.Component {
         this.state = { loaded: false, file: '', 
             progressInfo : { done: true, error: false, msg: '', pct: 0 },
             showFilePicker : true,
+            progressDialogTitle: '',
             showProgressDialog : false };
     }
 
@@ -53,8 +54,9 @@ export default class WorkflowWrapper extends React.Component {
     }   
 
     // <Child> event -- child must call this when a task requiring the progress bar starts
-    handleTaskStart() {
-        this.setState( { showProgressDialog : true } );
+    handleTaskStart(opts) {
+        this.setState( { progressDialogTitle: opts.taskName,
+                         showProgressDialog : true } );
     }
 
     // <Child> event -- child must call this when a task requiring the progress bar completes
@@ -115,7 +117,7 @@ export default class WorkflowWrapper extends React.Component {
         {this.childElement}
     </div>
     <ProgressDialog 
-        title={'Split Video'} 
+        title={this.state.progressDialogTitle}
         progress={this.state.progressInfo}
         show={this.state.showProgressDialog} 
         onProgressCancel={ () => self.handleProgressCancel() } 
