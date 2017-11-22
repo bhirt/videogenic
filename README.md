@@ -13,6 +13,7 @@ In the future there are plans to support native applications on Mac/Windows/Linu
 * Install ffmpeg somewhere in your search path
 * Install node (works best with node 8)
 * Clone the repository with `git clone`
+* If you don't want the most recent alpha version, `git checkout tags/0.1.0-alpha`
 * Change to the src directory
 * Edit config/default.json
 * Install npm dependencies with `npm install`
