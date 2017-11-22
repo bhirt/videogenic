@@ -1,14 +1,18 @@
 const fs = require('fs');
+const os = require('os');
 const { spawn } = require('child_process');
 const P2J = require('pipe2jpeg');
 const async = require('async');
 const replaceExt = require('replace-ext');
 const sanitize = require('sanitize-filename');
+const path = require('path');
 const pathType = require('path-type');
 const pathDirname = require('path-dirname');
+const randomstring = require("randomstring");
+const mkdirp = require('mkdirp');
+const rimraf = require('rimraf');
 
 const EDL = require('../../common/model/EDL');
-
 const utils = require('../../common/utils');
 const encodeImageToDataURI = require('../../common/utils').encodeImageToDataURI;
 const saveRangesFromEDL = require('../../common/utils').saveRangesFromEDL;
@@ -48,10 +52,14 @@ exports.ioProcessCuts = function(socket,msg) {
 
     let edl = new EDL(msg.edl);
 
+    // get a location for the workdir
+    let workdir = [os.tmpdir(),'org.videogenic',randomstring.generate(12)];
+
     console.log('process cuts');
     console.log(edl);
     console.log(msg);
     console.log(state);
+    console.log(path.join(...workdir));
     let saves = saveRangesFromEDL(edl,state.duration);
     console.log(saves);
 
@@ -64,9 +72,18 @@ exports.ioProcessCuts = function(socket,msg) {
     let cuts = [];
 
     let actions = [];
+
+    // first action is to create the work directory
+    actions.push(function(callback) {
+        mkdirp(path.join(...workdir),(err) => {
+            callback(err);
+        });
+    });
+
+    // create action for each part that need to be cut
     let partNumber = 0;
     saves.ranges.forEach(function(range) {
-        let output = `/tmp/output${partNumber}.ts`;
+        let output = path.join(...workdir,`output${partNumber}.ts`);
         let rangeDuration = range[1] - range[0];
         cuts.push(output);
         actions.push( function(callback) {
@@ -75,10 +92,19 @@ exports.ioProcessCuts = function(socket,msg) {
         partNumber++;
     });
 
+
+    // penultimate action is te combine the parts
     let output = input.replace('.ts',' - Cut.ts');
     actions.push( function(callback) {
         concatVideo(socket,progress,cuts,output,callback); 
     } );
+
+    // last action is to remove the work directory
+    actions.push(function(callback) {
+        rimraf(path.join(...workdir),{ glob: false }, (err) => {
+            callback(err);
+        });
+    });
 
     console.log('async actions');
     console.log(actions);
@@ -305,12 +331,14 @@ function hiddenFile(file) {
     return file.startsWith('.');
 }
 
+const filePickerEDLExtensions = config.get('filePicker.edlExtensions');
+const filePickerMediaExtensions = config.get('filePicker.mediaExtensions');
+const filePickerExtensions = [...filePickerEDLExtensions,...filePickerMediaExtensions].map( (ext) => '.' + ext.toLowerCase() );
+
 function validExtension(file) {
-    const extensions = ['.m4v','.edl','.ts','.mkv','.mp4'];
     let matches = 0;
 
-
-    extensions.forEach(function(ext) {
+    filePickerExtensions.forEach(function(ext) {
         if (matches || file.toLowerCase().endsWith(ext)) {
             matches = 1;
         }
@@ -321,25 +349,23 @@ function validExtension(file) {
 
 exports.ioDirectoryListing =  function(socket,msg) {
     
-    let path = msg.path ? [rootDirectory, ...msg.path] : [rootDirectory];
+    // array of components that make up the directory
+    let pathComponents = msg.path ? [rootDirectory, ...msg.path] : [rootDirectory];
 
-    let directory = path.join('/');
-
-    console.log(msg);
+    // joined components
+    let directory = path.join( ...pathComponents );
 
     fs.readdir(directory,function(err,files) {
         if (err) {
             socket.emit('directoryListingError', { error : true, msg : `error reading directory ${err}` } );
         }
         else {
-            let fullPathFiles = [];
-
-            files.forEach((file) => fullPathFiles.push(directory + '/' + file) );
+            let fullPathFiles = files.map( (f) => path.join(directory,f) );
 
             async.map(fullPathFiles, fs.stat, function(err, results) {
-            // results is now an array of stats for each file
+                // results is now an array of stats for each file
                 if (err) {
-                    res.send('error on stat files ' + err);
+                    socket.emit('directoryListingError',  { err: err });
                 }
                 else {
                     let id = 0;
@@ -357,10 +383,10 @@ exports.ioDirectoryListing =  function(socket,msg) {
                         idx++;
                     });
 
-                    // remove the root directory, we don't want this exposed to the client
-                    path.shift(); 
+                    // remove the rootDirectory (it's always the first item), we don't want this exposed to the client
+                    pathComponents.shift(); 
 
-                    socket.emit('directoryListing',  { 'column' : msg.column, 'path' : path, files : fileList });
+                    socket.emit('directoryListing',  { 'column' : msg.column, 'path' : pathComponents, files : fileList });
                 }
             });
         }

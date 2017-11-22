@@ -1,5 +1,10 @@
 {
     "mediaLibrary" : {
         "path" : "/Users/bhirt/Plex"
+    },
+    "filePicker" : {
+        // extensions are case insensitive
+        "edlExtensions" : ["edl"],
+        "mediaExtensions" : ["m4v","ts","mkv","mp4"]   
     }
 }
