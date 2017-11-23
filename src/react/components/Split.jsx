@@ -156,12 +156,3 @@ export default class Split extends React.Component {
         </div>);
     }
 }
-
-Split.propTypes = {
-};
-
-ReactDOM.render(
-    <WorkflowWrapper component={Split} />,
-    document.getElementById('root')
-);
-

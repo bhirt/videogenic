@@ -16,14 +16,37 @@ module.exports = {
         extensions: ['.js', '.jsx']
     },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /.jsx?$/,
-                loader: 'babel-loader',
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
-                query: {
-                    presets: ['env','stage-1','react']
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: false,
+                        presets: ['env','stage-1','react']
+                    }
                 }
+            },
+            {
+                test: /\.less$/,
+                use: [ 
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                          modules: true,
+                          sourceMap: true,
+                          importLoaders: 1,
+                          localIdentName: '[name]__[local]__[hash:base64:5]',
+                        }
+                    },
+                    {
+                        loader: 'less-loader'
+                    }
+                ]
             }
         ]
     }

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
+import styles from './FileList.less';
+
 
 export default class FileList extends React.Component {
     componentDidMount() {
@@ -28,9 +30,9 @@ export default class FileList extends React.Component {
     }
 
     render() {
-        return ( <ul className="fileList" ref={ (ul) => this.ulDom = ul } >
+        return ( <ul className={styles.fileList} ref={ (ul) => this.ulDom = ul } >
             {this.props.listing.items.map( (item) => {
-                let c = item.isDirectory ? 'directory' : 'file';
+                let c = item.isDirectory ? styles.directory : styles.file;
                 return <li className={c} key={item.id}><a onClick={ () => this.itemClicked(item) } href="#">{item.name}</a></li>;
             })}
         </ul>
