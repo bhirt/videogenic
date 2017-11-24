@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 
 import FileList from './FileList';
+import styles from './FilePicker.less';
 
 export default class FilePicker extends React.Component {
     constructor(props) {
@@ -96,8 +97,10 @@ export default class FilePicker extends React.Component {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <div id="fileBrowserContainer">
+                    <div className={styles.filePickerContainer}>
+                    <div className={styles.filePicker}>
                         {fileList}
+                    </div>
                     </div>
                 </Modal.Body>
 

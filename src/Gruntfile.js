@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     let lessSrc = './express/less/{file}.less';
 
     // list of modules to build
-    let lessModules = ['style','trim','split','edlcutter','rc-slider'];
+    let lessModules = ['style','split','edlcutter','rc-slider'];
 
     // Uses lessDest,lessSrc and lessModules to build the files: hash
     function lessMap() {
