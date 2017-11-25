@@ -2,6 +2,12 @@
 *.swp
 *.swo
 
+# special mac folder
+.DS_Store
+
+# npm diff noise
+package-lock.json
+
 # Logs
 logs
 *.log

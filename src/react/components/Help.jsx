@@ -1,5 +1,5 @@
 import React from 'react';
-import help from './Help.md';
+import help from '../../../doc/about.md';
 import styles from './Help.less';
 
 export default class Help extends React.Component {
