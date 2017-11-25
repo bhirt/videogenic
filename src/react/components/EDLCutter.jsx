@@ -10,7 +10,6 @@ import FramePreview from './FramePreview';
 import EDLSlider from './EDLSlider';
 import EDLList from './EDLList';
 import FrameSelectDialog from './FrameSelectDialog';
-import WorkflowWrapper from './WorkflowWrapper';
 
 import EDL from '../../common/model/EDL';
 
@@ -136,9 +135,3 @@ export default class EDLCutter extends React.Component {
         </div>);
     }
 }
-
-// Render an instance of MessageComponent into document.body
-ReactDOM.render(
-    <WorkflowWrapper component={EDLCutter} />,
-    document.getElementById('root')
-);
