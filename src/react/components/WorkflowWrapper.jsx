@@ -5,6 +5,7 @@
 // 
 // https://reactjs.org/docs/higher-order-components.html
 //
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -13,6 +14,8 @@ import { Button } from 'react-bootstrap';
 
 import ProgressDialog from './ProgressDialog';
 import FilePicker from './FilePicker';
+
+const debug = require('../../common/debug')('react:components:WorkflowWrapper');
 
 export default class WorkflowWrapper extends React.Component {
 
@@ -28,7 +31,7 @@ export default class WorkflowWrapper extends React.Component {
 
         this.state = { loaded: false, file: '', 
             progressInfo : { done: true, error: false, msg: '', pct: 0 },
-            showFilePicker : true,
+            showFilePicker : false,
             progressDialogTitle: '',
             showProgressDialog : false };
     }
@@ -61,8 +64,6 @@ export default class WorkflowWrapper extends React.Component {
 
     // <Child> event -- child must call this when a task requiring the progress bar completes
     handleTaskProgress(progressInfo) {
-        console.log('handle progress info');
-        console.log(progressInfo);
         this.setState( { progressInfo : progressInfo } );
     }
 
@@ -80,7 +81,7 @@ export default class WorkflowWrapper extends React.Component {
 
     // <FilePicker> event
     handleFileSelected(path,file) {
-        console.log('split:fileSelected: ',path,file);
+        debug('split:fileSelected: ',path,file);
         let self = this;
 
         let fileRequest = { 
@@ -124,7 +125,7 @@ export default class WorkflowWrapper extends React.Component {
         onProgressClose={ () => self.handleProgressClose() } 
     />
 </div>;
-        }   
+        }
         else if (this.state.showFilePicker) {
             content = <FilePicker datasource={requestDirectoryListing} onSelectCanceled={this.handleSelectCanceled.bind(this)} onFileSelected={this.handleFileSelected.bind(this)} />;
         }
