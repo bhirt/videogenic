@@ -10,7 +10,6 @@ import { Button,  FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-
 import { sprintf } from 'sprintf-js';
 
 import { splitVideo } from './react-app';
-import WorkflowWrapper from './WorkflowWrapper';
 import EDLTimeline from './EDLTimeline';
 import FramePreview from './FramePreview';
 
