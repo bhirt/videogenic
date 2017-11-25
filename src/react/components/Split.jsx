@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 import Slider from 'rc-slider';
+import './rc-slider.global.css';
+
 import { Button,  FormGroup, FormControl, ControlLabel, HelpBlock } from 'react-bootstrap';
 
 import { sprintf } from 'sprintf-js';
@@ -11,6 +13,8 @@ import { splitVideo } from './react-app';
 import WorkflowWrapper from './WorkflowWrapper';
 import EDLTimeline from './EDLTimeline';
 import FramePreview from './FramePreview';
+
+import styles from './Split.less';
 
 const scanner = require('../../common/utils/filenameScanner');
 
@@ -111,10 +115,10 @@ export default class Split extends React.Component {
         return (<div>
             <h1>{this.props.fileInfo.file}</h1>
             <div>
-                <div style={ { padding: '1em 1em 1em 2em', width: '60%', float: 'left' } }>
+                <div className={styles.preview}>
                     <FramePreview ts={this.state.currentTs} />
                 </div>
-                <div style={ { padding: '1em 2em 1em 1em', width: '40%', float: 'right' } }>
+                <div className={styles.inputs}>
                     <form>
                         <FormGroup>
                             <ControlLabel>Part 1</ControlLabel>
@@ -146,7 +150,7 @@ export default class Split extends React.Component {
 
                 </div>
             </div>
-            <div style={ { padding: '1em 2em', clear: 'both' } }>
+            <div className={styles.timeline}>
                 <br />
                 <EDLTimeline duration={this.props.fileInfo.duration} edl={this.props.fileInfo.edl} />
                 <br />

@@ -9,9 +9,9 @@ export default class EDLTimeline extends React.Component {
         let left = (ed[0] / this.props.duration) * 100;
         let width = (edDuration / this.props.duration) * 100;
         let key = left + ':' + width;
-        console.log(`key is ${key}`);
 
-        let style = { 'top': '0px', 
+        let style = { 
+            'top': '0px', 
             'height': '100%', 
             'backgroundColor': 'red', 
             'position':'absolute', 

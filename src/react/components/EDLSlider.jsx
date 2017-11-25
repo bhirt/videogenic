@@ -4,7 +4,9 @@ import PropTypes from 'prop-types';
 import { Tooltip, OverlayTrigger, Button } from 'react-bootstrap';
 
 import clamp from 'lodash/clamp';
+
 import Slider from 'rc-slider';
+import './rc-slider.global.css';
 
 const Range = Slider.createSliderWithTooltip(Slider.Range);
 

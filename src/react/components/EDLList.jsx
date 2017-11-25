@@ -7,12 +7,14 @@ const finalSplicePointsFromEDL = require('../../common/utils').finalSplicePoints
 const utils = require('../../common/utils');
 const sec2ts = require('../../common/utils/sec2ts');
 
+import styles from './EDLList.less';
+
 class EDLSpliceInfoItem extends React.Component {
 
     render() {
         return (
             <div>Splice #{this.props.number}
-                <span className="edlValue">{utils.shortDurationDescription(this.props.slice)}</span>
+                <span className={styles.value}>{utils.shortDurationDescription(this.props.slice)}</span>
             </div>);
     }
 }
@@ -27,7 +29,7 @@ class EDLSpliceInfo extends React.Component {
         this.splices = finalSplicePointsFromEDL(this.props.edl,this.props.duration);
         let num = 1;
         return (
-            <div id="edlSplices">
+            <div className={styles.splices}>
                 <h2>Splice Points</h2>
                 {this.splices.map( s => <EDLSpliceInfoItem key={num} number={num++} slice={s} /> )}
             </div>
@@ -93,12 +95,12 @@ EDLEditLinks.propTypes = {
 
 class EDLLengthInfo extends React.Component {
     render() {
-        return (<div id="edlNotes">
-Video length <span className="edlValue">{utils.shortDurationDescription(this.props.duration)}</span>
+        return (<div className={styles.notes}>
+Video length <span className={styles.value}>{utils.shortDurationDescription(this.props.duration)}</span>
             <br />
-Cut length <span className="edlValue">{utils.shortDurationDescription(this.props.cutTime)}</span>
+Cut length <span className={styles.value}>{utils.shortDurationDescription(this.props.cutTime)}</span>
             <br />
-Video length after cut <span className="edlValue">{utils.shortDurationDescription(this.props.duration - this.props.cutTime)}</span>
+Video length after cut <span className={styles.value}>{utils.shortDurationDescription(this.props.duration - this.props.cutTime)}</span>
         </div>);
     }
 }

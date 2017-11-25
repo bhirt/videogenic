@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 const sec2ts = require('../../common/utils/sec2ts');
 const axios = require('axios');
 
+import styles from './FramePreview.less';
+
 let EventEmitter = require('events');
 
 let currentRequestId = 0;
@@ -271,9 +273,9 @@ export default class FramePreview extends React.Component {
 
     render() {
         return (
-            <div id="thumbnail-container">
-                <img id="thumbnail" src={this.state.imageURI} />
-                <div style={ { 'textAlign': 'left', top:0, 'width' : '100%', position: 'absolute'} }> <span id="thumbnail-timestamp">{sec2ts(this.props.ts)}</span></div>
+            <div className={styles.container}>
+                <img className={styles.image} src={this.state.imageURI} />
+                <div className={styles.timestampContainer}><span className={styles.timestamp}>{sec2ts(this.props.ts)}</span></div>
             </div>
         );
     }

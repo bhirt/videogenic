@@ -36,32 +36,26 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
     "babel-watch": "^2.0.7",
+    "cross-env": "^5.1.1",
     "css-loader": "^0.28.7",
     "eslint": "^4.11.0",
     "eslint-plugin-react": "^7.5.1",
-    "grunt": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-less": "^1.4.1",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-env": "^0.4.4",
-    "grunt-express-server": "^0.5.3",
-    "grunt-newer": "^1.3.0",
-    "grunt-shell": "^2.1.0",
+    "extract-text-webpack-plugin": "^3.0.2",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "ncp": "^2.0.0",
     "npm-run-all": "^4.1.2",
-    "style-loader": "^0.19.0"
+    "style-loader": "^0.19.0",
+    "webpack-dev-server": "^2.9.4"
   },
   "scripts": {
-    "watch:express": "NODE_ENV=development babel-watch --presets stage-2 express/app.js",
-    "watch:react": "NODE_ENV=development webpack --progress --colors --watch",
-    "build:react": "NODE_ENV=production webpack --progress",
-    "build:express": "NODE_ENV=production babel express -d dist/express --presets env,stage-2",
-    "build:express-common": "NODE_ENV=production babel common -d dist/common --presets env,stage-2",
-    "build:css-all": "NODE_ENV=production grunt less:prod",
+    "watch:express": "cross-env NODE_ENV=development babel-watch --presets stage-2 express/app.js",
+    "watch:react": "cross-env NODE_ENV=development webpack --progress --colors --watch",
+    "build:react": "cross-env NODE_ENV=production webpack --progress",
+    "build:express": "cross-env NODE_ENV=production babel express -d dist/express --presets env,stage-2",
+    "build:express-common": "cross-env NODE_ENV=production babel common -d dist/common --presets env,stage-2",
     "build:express-views": "ncp express/views/ dist/express/views/",
     "build": "npm-run-all build:*",
-    "start": "NODE_ENV=production node dist/express/app.js"
+    "start": "cross-env NODE_ENV=production node dist/express/app.js"
   }
 }

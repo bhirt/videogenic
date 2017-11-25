@@ -1,15 +1,16 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-    devtool: "source-map",
+    devtool: 'source-map',
     entry: {
-            'edlcutter' : './react/entry/EDLCutter.jsx',
-            'split' : './react/entry/Split.jsx'
-           },
+        'edlcutter' : './react/entry/EDLCutter.jsx',
+        'split' : './react/entry/Split.jsx'
+    },
     output: { 
-        filename: '[name].js',
-        path: path.resolve(__dirname,'./dist/static/js'),
+        filename: 'js/[name].js',
+        path: path.resolve(__dirname,'./dist/static/'),
         sourceMapFilename: '[file].map'
     },
     resolve: {
@@ -29,25 +30,50 @@ module.exports = {
                 }
             },
             {
-                test: /\.less$/,
-                use: [ 
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
+                test: /\.global\.css$/,
+                use: ExtractTextPlugin.extract({
+                    use: 'css-loader',
+                    fallback: 'style-loader',
+                })
+            },
+            {
+                test: /^((?!\.global).)*\.css$/,
+
+                use: ExtractTextPlugin.extract({
+                    use: [{
                         loader: 'css-loader',
                         options: {
-                          modules: true,
-                          sourceMap: true,
-                          importLoaders: 1,
-                          localIdentName: '[name]__[local]__[hash:base64:5]',
+                            modules: true,
+                            sourceMap: true,
+                            importLoaders: 1,
+                            localIdentName: '[name]__[local]__[hash:base64:5]',
+                        }
+                    }]
+                }),
+            },
+            {
+                test: /\.less$/,
+                use: ExtractTextPlugin.extract({
+                    use: [{
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            sourceMap: true,
+                            importLoaders: 1,
+                            localIdentName: '[name]__[local]__[hash:base64:5]',
                         }
                     },
                     {
                         loader: 'less-loader'
-                    }
-                ]
+                    }]
+                }),
             }
         ]
-    }
+    },
+    plugins: [
+        new ExtractTextPlugin({
+            filename: 'css/[name].css'
+        }),
+
+    ]
 };
