@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 //const socket = io();
 
 console.log('creating socket io object');
-export const socket = io();
+export const socket = io('http://localhost:3001');
 console.log('socket io object created');
 
 export function requestFileInfo(msg,callback) {

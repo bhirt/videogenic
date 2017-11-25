@@ -4,15 +4,21 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const marked = require('marked');
 const markdownRenderer = new marked.Renderer();
 
+const hmr = [
+    'react-hot-loader/patch',
+    'webpack-hot-middleware/client?noInfo=false'
+];
+
+
 module.exports = {
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     entry: {
-        'bundle' : './react/entry/App.jsx',
+        'bundle' : hmr.concat(['./react/entry/App.jsx'])
     },
     output: { 
         filename: 'js/[name].js',
         path: path.resolve(__dirname,'./dist/static/'),
-        sourceMapFilename: '[file].map'
+        publicPath: '/'
     },
     resolve: {
         extensions: ['.js', '.jsx']
@@ -37,26 +43,37 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        cacheDirectory: false,
-                        presets: ['env','stage-1','react']
-                    }
-                }
+                use: [
+                    {
+                        loader: 'react-hot-loader/webpack'
+                    },
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            cacheDirectory: false,
+                            presets: ['env','stage-1','react']
+                        }
+                    } 
+                ]
             },
             {
                 test: /\.global\.css$/,
-                use: ExtractTextPlugin.extract({
-                    use: 'css-loader',
-                    fallback: 'style-loader',
-                })
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
+                        loader: 'css-loader',
+                    }
+                ]
             },
             {
                 test: /^((?!\.global).)*\.css$/,
-
-                use: ExtractTextPlugin.extract({
-                    use: [{
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
                         loader: 'css-loader',
                         options: {
                             modules: true,
@@ -64,13 +81,16 @@ module.exports = {
                             importLoaders: 1,
                             localIdentName: '[name]__[local]__[hash:base64:5]',
                         }
-                    }]
-                }),
+                    }
+                ]
             },
             {
                 test: /\.less$/,
-                use: ExtractTextPlugin.extract({
-                    use: [{
+                use: [
+                    {
+                        loader: 'style-loader'
+                    },
+                    {
                         loader: 'css-loader',
                         options: {
                             modules: true,
@@ -81,8 +101,8 @@ module.exports = {
                     },
                     {
                         loader: 'less-loader'
-                    }]
-                }),
+                    }
+                ]
             }
         ]
     },
@@ -91,5 +111,8 @@ module.exports = {
             filename: 'css/[name].css'
         }),
 
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin()
+        
     ]
 };

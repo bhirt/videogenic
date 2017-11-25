@@ -8,7 +8,7 @@ const sanitize = require('sanitize-filename');
 const path = require('path');
 const pathType = require('path-type');
 const pathDirname = require('path-dirname');
-const randomstring = require("randomstring");
+const randomstring = require('randomstring');
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
 

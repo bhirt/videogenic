@@ -25,3 +25,13 @@ ReactDOM.render((
     ), document.getElementById('root')
 );
 
+if (module.hot) {
+  console.log('have module.hot');
+
+  module.hot.accept();
+
+  module.hot.dispose((data) => {
+    console.log('dispose');
+  });
+}
+
