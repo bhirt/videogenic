@@ -1,12 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const marked = require('marked');
+const markdownRenderer = new marked.Renderer();
 
 module.exports = {
     devtool: 'source-map',
     entry: {
-        'edlcutter' : './react/entry/EDLCutter.jsx',
-        'split' : './react/entry/Split.jsx'
+        'bundle' : './react/entry/App.jsx',
     },
     output: { 
         filename: 'js/[name].js',
@@ -18,6 +19,21 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.md$/,
+                use: [
+                    {
+                        loader: "html-loader"
+                    },
+                    {
+                        loader: "markdown-loader",
+                        options: {
+                            pedantic: true,
+                            renderer: markdownRenderer
+                        }                        
+                    }
+                ]
+            },
             {
                 test: /\.jsx?$/,
                 exclude: /node_modules/,

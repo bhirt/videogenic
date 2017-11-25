@@ -7,6 +7,7 @@ import clamp from 'lodash/clamp';
 
 import Slider from 'rc-slider';
 import './rc-slider.global.css';
+import styles from './EDLSlider.less';
 
 const Range = Slider.createSliderWithTooltip(Slider.Range);
 
@@ -186,7 +187,7 @@ export default class EDLSlider extends React.Component {
         let hashmarks = [];
         let startTs = 0;
         while (startTs < this.props.duration) {
-            let className = startTs % 300 ? 'minuteHash' : 'fiveMinuteHash';
+            let className = startTs % 300 ? styles.minuteHash : styles.fiveMinuteHash;
             hashmarks.push(<div key={startTs} className={className} style={ { left : _ts2pct(startTs) }}></div>);
             startTs += 60;
         }
@@ -261,7 +262,7 @@ export default class EDLSlider extends React.Component {
                 />
 
                 <div  key="timeline" 
-                    className="timeline"
+                    className={styles.timeline}
                     onMouseMove={this.handleTimelineMouseMove.bind(this)} 
                     ref={ (e) => this.divElement = e}
                 >

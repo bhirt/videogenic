@@ -1,177 +1,143 @@
-<html>
-<head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+# About
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-
-</head>
-<body>
-
-<% include ./partials/header %>
-
-<div style="padding: 1em 2em">
-
-<h1>About</h1>
-
-<p>
 This software is brand new, actively being developed and very much 
 at an alpha/proof of concept stage.   Don't expect a feature rich, stable 
 and easy to install application.   You will need to tinker with the 
 command line and possibly make code changes to get it working for you. You will also 
-have to install additionaly third party software such as <b>node</b> and 
-<b>ffmpeg</b>
-</p>
+have to install additionaly third party software such as __node__ and 
+__ffmpeg__
 
-<h1>History</h1>
+# History
 
-<p>
 I use Plex for my media library.  I recently got an HDHomeRun and set 
 it up to be used as a DVR through Plex.   For the most part it's been 
 working great, but the commercials are really annoying.  I started using
 using <a href="http://www.kaashoek.com/comskip/">comskip</a> (took some
 tinkering) and it did an okay job of detecting commercials and things looked
 very promissing.  
-</p>
 
-<p>
 Next I got <a href="https://github.com/BrettSheleski/comchap">comchap</a> and started
-using it's <b>comcut</b> script to create a new video based on the <b>comskip</b> generated EDL.
+using it's __comcut__ script to create a new video based on the __comskip__ generated EDL.
 Immediately I started to notice all the errors with comskips commercial detection. 
 Since all the segments marked in the EDL were removed from the file, 
 including false positives have, you are out of luck.  This
 is slightly annoying when you get an extra second of a commercial or miss a second or
 two of your show. However, it becomes a showstopper when 5 minutes of the show you are watching 
 gets removed from your video. 
-</p>
 
-<p>
-After that I started using <b>comchap</b> instead of <b>comcut</b>.   <b>Comchap</b> automatically 
+After that I started using __comchap__ instead of __comcut__.   __Comchap__ automatically 
 add chapter markers to your videos based on where the EDL.  The problem 
 with this approach was twofold.  First, there was no quick easy way to skip 
 to the next chapter in Plex when a commercial started.   Second, if the 
 commercial detection was off, it was too slow to sikp forward 30/back 10 
 in Plex and to make things worse, things like the Apple TV version of Plex 
 don't even have +30/-10 options, you have to manually sroll with the remote. 
-So <b>comchap</b> got put on the chopping block.
-</p>
-Finally I decided that I would manually go through my videos and fix the edl created by <b>comskip</b>.   
+So __comchap__ got put on the chopping block.
+
+Finally I decided that I would manually go through my videos and fix the edl created by __comskip__.   
 It quickly became clear that using Plex or VLC to manually thumb through videos to find 
 the proper timestamps and then manually editing the EDL was an epic waste of time and 
 extremely error prone.  
-</p>
-<p>
+
 Resigned, I spent hours and hours researching for any tool that might help me that I missed my first time around.
 Sadly, I was unable to find anything that would work on my Mac or meet the requirements
 I had.  People all seem to love mcebuddy, but it wasn't anything I could use.  The
 tools I tried either didn't work or didn't support the fast streamlined process I was 
 invisioning.
-</p>
-<p>
+
 Eventually I decided to create something that would help me with this 
 task and thus this project was born.
-</p>
 
+# Basic Features
 
-<h1>Basic Features</h1>
+## Split
 
-<h2>Split</h2>
-
-<p>
 This feature allows you to split a video into two parts using ffmpegs lossless stream copy.   Move the slider 
 to where you want the video to be split and press the split button.  Two files will
 be created in the same directory as the original video with the names supplied.
 You are not able to specify a different output directory and trying to put slashes in the filename will cause an error when attempting to split.
-</p>
 
-</p>
 If the file has an associated EDL, a visual range will be displayed above the slider showing there the commercial breaks are.
-</p>
 
+## EDL Cutter
 
-<h2>EDL Cutter</h2>
-
-<p>
 This feature currently allows you to load, edit and save an EDL for a video and also gives the ability to create a new video which extracts
 out the commercials.  
-</p>
 
-<h1>Roadmap</h1>
+# Roadmap
 
-<p>
 The motivation for creating this software is to help me manage my Plex library.   
 The initial features I have implemented are specifiaclly for needs that I had.  
 I have a pretty basic roadmap and a limited amount of time to work on this project.
-</p>
 
-<ul>
-<li>add ability to store configuration in an external file, most likely using the npm <a href="https://www.npmjs.com/package/config">conig</a> module</li>
-<li>add ability to edit some of the configuration within the app</li>
-<li>more persistant backend session. currently the backend session is stored in memory using the express <a href="https://www.npmjs.com/package/memorystore">memorystore</a> module.  When the server is restarted (which happens during development all the time), the client is forced to start the editing process all over.</li>
-<li>create a backend version of the cut process that allows the final output to be created without having to write intermediate files to disk to speed up the IO.  This can be done on posix systems that support named pipes.   The <a href="https://trac.ffmpeg.org/wiki/Concatenate">concatenate document</a> over on ffpmeg's site shows some examples of how that can be done.</li>
-<li>improve <b>Split</b> to create two edl from the source edl</li>
-<li>create clip functionality that allows you to easily select a timerange and save it</li>
-<li>css modules</li>
-<li>babel hot loading</li>
-<li>add Windows and Linux compatibilyt</li>
-<li>create an <a href="https://electron.atom.io/">Electron</a> version of the app that doesn't need a backend server and can all be run natively.</li>
-</ul>
+## TODO
 
-<p>
+* add ability to edit some of the configuration within the app
+* more persistant backend session. currently the backend session is stored 
+  in memory using the express <a href="https://www.npmjs.com/package/memorystore">memorystore</a> 
+  module.  When the server is restarted (which happens during development 
+  all the time), the client is forced to start the editing process all over.
+* create a backend version of the cut process that allows the final output 
+  to be created without having to write intermediate files to disk to 
+  speed up the IO.  This can be done on posix systems that support named 
+  pipes.   The <a href="https://trac.ffmpeg.org/wiki/Concatenate">concatenate document</a> 
+  over on ffpmeg's site shows some examples of how that can be done.
+* improve __Split__ to create two edl from the source edl
+* create clip functionality that allows you to easily select a timerange and save it
+* babel hot loading
+* add Windows and Linux compatibilyt
+* create an <a href="https://electron.atom.io/">Electron</a> version of the app that doesn't need a backend server and can all be run natively.
+
+## Completed
+
+* ~~add ability to store configuration in an external file, most likely using 
+  the npm <a href="https://www.npmjs.com/package/config">conig</a> module~~
+* ~~css modules~~
+
 I imagine that Windows and Linux support will be the most requested 
 feature initially.  My problems with getting them supported is that I 
 don't have a windows machine or a linux machine.  I also don't have 
 <a href="https://www.parallels.com">parallels</a> or a <a href="https://www.microsoft.com/en-us/software-download/windows10ISO">Windows 10</a> license.
 Linux will probably be the easiest since I can download <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> and <a href="https://www.ubuntu.com">Ubuntu</a>
-</p>
 
-<p>
 If Windows and Linux support is something you want, I will need help
 from you to get it done.
-</p>
 
-<h1>Support</h1>
+# Support
 
-<p>
 If you are having problems, I'll try my best to help.  My main machine 
 is a Mac and I don't currently have access to Linux or Windows.  Any 
 platform specific questions I 
-</p>
 
-<h1>Feature Requests</h1>
+# Feature Requests
 
-<p>
 Open an issue on the github repo.  If the feature makes sense and is easy to 
 implement and I have time, I will attempt to add it.
-</p>
 
-<p>
 If you want to implement your own feature, fork the repo and submit a pull 
 request.   If the pull request is approved it will be merged into the project.
 Otherwise you can use your own fork.   Note any submissions to the projcet 
 must use the same license as this one.
-</p>
 
-<h1>Technologies</h1>
+# Technologies
 
 This application is built using the following technologies:   
 
-<ul>
-<li>ffmpeg - all video processing and frame grabs.  ffmpeg pretty much does all the heavy lifting for this app</li>
-<li><a href="https://reactjs.org">react</a> - front end browser components</li>
-<li><a href="https://react-bootstrap.github.io">react-bootstrap</a> - browesr ui components</li>
-<li>node- for the backend server</li>
-<li>express - for the backend webserver</li>
-<li>socket.io - for the backend/frontend messaging</li>
-<li>babel - for converting jsx and es6 code to something that can run in the browser</li>
-<li>webpack - for packaging the javascript into a runable bundle</li>
-</ul>
+* ffmpeg - all video processing and frame grabs.  ffmpeg pretty much does all the heavy lifting for this app
+* <a href="https://reactjs.org">react</a> - front end browser components
+* <a href="https://react-bootstrap.github.io">react-bootstrap</a> - browesr ui components
+* node- for the backend server
+* express - for the backend webserver
+* socket.io - for the backend/frontend messaging
+* babel - for converting jsx and es6 code to something that can run in the browser
+* webpack - for packaging the javascript into a runable bundle
 
 
-<h1>License</h1>
+# License
 
 
-<pre>
+```
 
 BSD 2-Clause License
 
@@ -199,11 +165,5 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-</pre>
+```
 
-</div>
-
-<% include ./partials/footer %>
-
-</body>
-</html>

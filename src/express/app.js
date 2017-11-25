@@ -91,9 +91,11 @@ app.disable('view cache');
 app.disable('etag');
 
 app.get('/', function (req, res) {
-    res.render('home', { jsInit: JSON.stringify({}) });
+//    res.render('home', { jsInit: JSON.stringify({}) });
+    res.render('bundle', { jsInit: JSON.stringify({}) });
 });
 
+/*
 app.get('/split', function (req,res) { 
     res.render('split', { jsInit: JSON.stringify({}) });
 });
@@ -109,6 +111,8 @@ app.get('/blank', function (req, res) {
 app.get('/help', function (req, res) {
     res.render('help', { jsInit: JSON.stringify({}) });
 });
+
+*/
 
 app.get('/image/:ts', function (req, res) {
 

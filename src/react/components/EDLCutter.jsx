@@ -56,7 +56,7 @@ export default class EDLCutter extends React.Component {
 
         if (this.edl && this.edlUpdatePromise) {
             console.log('have edl, unsubscribing to edl update event');
-            this.edl.off('updated',this.edlUpdatePromise);
+            this.edl.removeListener('updated',this.edlUpdatePromise);
         }
     }
 
